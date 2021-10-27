@@ -1,0 +1,16 @@
+@charset "ISO-8859-1";
+table tbody tr:nth-child(odd) {
+	background: #fff5e0;
+}
+table tbody tr:nth-child(even) {
+	background: #fdf8ef;
+}
+table thead {
+  background: #444;
+  color: #fff;
+  font-size: 18px;
+}
+table {
+  border-collapse: collapse;
+  width: 60%;
+}
