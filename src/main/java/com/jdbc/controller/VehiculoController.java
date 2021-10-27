@@ -14,13 +14,16 @@ import javax.swing.JOptionPane;
 
 import com.jdbc.dao.VehiculoDAO;
 import com.jdbc.model.Vehiculo;
+
 @WebServlet("/vehiculoController")
 public class VehiculoController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	VehiculoDAO vehiculoDAO = new VehiculoDAO();
+
 	public VehiculoController() {
 		super();
 	}
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String opcion = request.getParameter("opcion");
@@ -32,40 +35,47 @@ public class VehiculoController extends HttpServlet {
 			VehiculoDAO vehiculoDAO = new VehiculoDAO();
 			Vehiculo vehiculo = new Vehiculo();
 			vehiculo = vehiculoDAO.getVehiculo(id);
-			//System.out.println(vehiculo);
+			// System.out.println(vehiculo);
 			request.setAttribute("vehiculo", vehiculo);
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("editar.jsp");
 			requestDispatcher.forward(request, response);
-		}else if (opcion.equals("eliminar")) {
+		} else if (opcion.equals("eliminar")) {
 			VehiculoDAO vehiculoDAO = new VehiculoDAO();
-			int id=Integer.parseInt(request.getParameter("id"));
+			int id = Integer.parseInt(request.getParameter("id"));
 			try {
 				vehiculoDAO.delete(id);
 				System.out.println("Registro eliminado satisfactoriamente...");
-				//JOptionPane.showMessageDialog(null,"Registro eliminado satisfactoriamente...");
+				// JOptionPane.showMessageDialog(null,"Registro eliminado
+				// satisfactoriamente...");
 				List<Vehiculo> lista = vehiculoDAO.getAll();
 				request.setAttribute("vehiculos", lista);
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
 				requestDispatcher.forward(request, response);
 			} catch (SQLException e) {
 				e.printStackTrace();
-			}}}
+			}
+		}
+	}
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String opcion = request.getParameter("opcion");
 		if (opcion.equals("crear")) {
 			Vehiculo vehiculo = new Vehiculo();
-			vehiculo= llenarVehiculo(request);
-/*			vehiculo.setPlaca(request.getParameter("placa"));
-			vehiculo.setMarca(request.getParameter("marca"));
-			vehiculo.setModelo(request.getParameter("modelo"));
-			vehiculo.setCilindraje(request.getParameter("cilindraje"));
-			vehiculo.setAnio(request.getParameter("anio"));
-			vehiculo.setConsumo(request.getParameter("consumo"));*/
+			vehiculo = llenarVehiculo(request);
+			/*
+			 * vehiculo.setPlaca(request.getParameter("placa"));
+			 * vehiculo.setMarca(request.getParameter("marca"));
+			 * vehiculo.setModelo(request.getParameter("modelo"));
+			 * vehiculo.setCilindraje(request.getParameter("cilindraje"));
+			 * vehiculo.setAnio(request.getParameter("anio"));
+			 * vehiculo.setConsumo(request.getParameter("consumo"));
+			 */
 			try {
 				if (vehiculoDAO.save(vehiculo)) {
 					System.out.println("Registro guardado correctamente.....");
-					//JOptionPane.showMessageDialog(null,"Registro guardado satisfactoriamente...");
+					// JOptionPane.showMessageDialog(null,"Registro guardado
+					// satisfactoriamente...");
 				} else {
 					System.out.println("Registro no guardado");
 				}
@@ -89,21 +99,24 @@ public class VehiculoController extends HttpServlet {
 			try {
 				vehiculoDAO.update(vehiculo);
 				System.out.println("Registro editado satisfactoriamente...");
-				//JOptionPane.showMessageDialog(null,"Registro editado satisfactoriamente...");
+				// JOptionPane.showMessageDialog(null,"Registro editado satisfactoriamente...");
 				List<Vehiculo> lista = vehiculoDAO.getAll();
 				request.setAttribute("vehiculos", lista);
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
 				requestDispatcher.forward(request, response);
-				
 			} catch (SQLException e) {
 				e.printStackTrace();
-			}}}
-	
-	private void mostrarPagina(HttpServletRequest request, HttpServletResponse response, String pagina) throws ServletException, IOException {
+			}
+		}
+	}
+
+	private void mostrarPagina(HttpServletRequest request, HttpServletResponse response, String pagina)
+			throws ServletException, IOException {
 		RequestDispatcher rd = request.getRequestDispatcher(pagina);
 		rd.forward(request, response);
 	}
-	private Vehiculo llenarVehiculo (HttpServletRequest request) {
+
+	private Vehiculo llenarVehiculo(HttpServletRequest request) {
 		Vehiculo vehiculo = new Vehiculo();
 		vehiculo.setPlaca(request.getParameter("placa"));
 		vehiculo.setMarca(request.getParameter("marca"));
@@ -112,4 +125,5 @@ public class VehiculoController extends HttpServlet {
 		vehiculo.setAnio(request.getParameter("anio"));
 		vehiculo.setConsumo(request.getParameter("consumo"));
 		return vehiculo;
-	}}
+	}
+}
